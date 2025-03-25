@@ -1,0 +1,58 @@
+.logo {
+    text-align: center; /* Centraliza o conteúdo inline */
+    background-color: #ffdc42;
+}
+
+.logo img {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    display: block; /* Necessário para margin auto funcionar */
+    margin: 0 auto; /* Centraliza horizontalmente */
+}
+.menu-container {
+    background-color: yellow; /* Cor de fundo da div */
+    padding: 20px; /* Espaçamento interno */
+    border: 1px solid #ddd; /* Borda da div */
+    border-radius: 5px; /* Arredondamento das bordas */
+    display: flex; /* Necessário para o alinhamento interno */
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+      
+    top: 0;
+}
+
+.menu {
+    list-style-type: none; /* Remove os marcadores da lista */
+    padding: 0; /* Remove o padding da lista */
+    margin: 0; /* Remove a margem da lista */
+    display: flex; /* Exibe os itens na mesma linha */
+    gap: 8px; /* Espaçamento entre os itens do menu */
+    margin-left: auto; /* Empurra os itens para a direita */
+    justify-content: center;
+}
+
+.menu li {
+    margin: 0; /* Remove margem entre os itens do menu */
+}
+
+.menu a {
+    text-decoration: none; /* Remove o sublinhado dos links */
+    color: #333333; /* Cor do texto dos links */
+    padding: 8px 15px; /* Espaçamento interno dos links */
+    border-radius: 10px; /* Arredonda as bordas dos links */
+    transition: background-color 0.3s; /* Transição suave para o hover */
+    font: normal 20px helvetica, Arial;
+}
+
+.menu a:hover {
+    background-color: #ffa74273; /* Cor de fundo ao passar o mouse */
+    color: #000; /* Cor do texto ao passar o mouse */
+}
+
+.body {
+    width: 100%;
+    max-width: 500px; /* Define a largura máxima */
+    height: 1500px; /* Ajusta automaticamente a altura */
+}
