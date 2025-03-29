@@ -1,44 +1,143 @@
+
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../database/db.js';
-
-// Função de validação de CPF
-const validarCPF = (cpf) => {
-    cpf = cpf.replace(/\D/g, '');
-
-    // Verifica tamanho e dígitos repetidos
-    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-
-    // Cálculo dos dígitos verificadores
-    const calcularDigito = (slice) => {
-        let soma = 0;
-        for (let i = 0; i < slice.length; i++) {
-            soma += parseInt(slice[i]) * (slice.length + 1 - i);
-        }
-        const resto = (soma * 10) % 11;
-        return resto === 10 ? 0 : resto;
-    };
-
-    const digito1 = calcularDigito(cpf.slice(0, 9));
-    const digito2 = calcularDigito(cpf.slice(0, 10));
-
-    return digito1 === parseInt(cpf[9]) && digito2 === parseInt(cpf[10]);
-};
+import bcrypt from 'bcrypt';
+import { sequelize } from '../database/index.js';
 
 const User = sequelize.define('User', {
-    // ... outros campos ...
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'O nome não pode estar vazio'
+            },
+            len: {
+                args: [2, 255],
+                msg: 'O nome deve ter entre 2 e 255 caracteres'
+            }
+        }
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+            msg: 'Este nome de usuário já está em uso'
+        },
+        validate: {
+            notEmpty: {
+                msg: 'O username não pode estar vazio'
+            },
+            len: {
+                args: [3, 255],
+                msg: 'O username deve ter entre 3 e 255 caracteres'
+            }
+        }
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+            msg: 'Este email já está cadastrado'
+        },
+        validate: {
+            isEmail: {
+                msg: 'Por favor, insira um email válido'
+            },
+            notEmpty: {
+                msg: 'O email não pode estar vazio'
+            }
+        }
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'A senha não pode estar vazia'
+            },
+            len: {
+                args: [6, 255],
+                msg: 'A senha deve ter pelo menos 6 caracteres'
+            }
+        }
+    },
     cpf: {
         type: DataTypes.STRING(11),
         allowNull: false,
         unique: true,
         validate: {
-            isCpfValid(value) {
-                if (!validarCPF(value)) {
-                    throw new Error('CPF inválido');
+            notNull: {
+                msg: "CPF é obrigatório"
+            },
+            len: {
+                args: [11, 11],
+                msg: "CPF deve ter exatamente 11 caracteres"
+            },
+            isNumeric: {
+                msg: "CPF deve conter apenas números"
+            }
+        }
+    },
+    avatar: {
+        type: DataTypes.STRING,
+        defaultValue: 'default-avatar.jpg',
+        validate: {
+            isUrl: {
+                msg: 'O avatar deve ser uma URL válida',
+                args: {
+                    protocols: ['http', 'https'],
+                    require_protocol: true
                 }
             }
         }
     },
-    // ... outros campos ...
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    }
+}, {
+    tableName: 'Users',
+    timestamps: true,
+    hooks: {
+        beforeCreate: async (user) => {
+            if (user.password) {
+                const salt = await bcrypt.genSalt(10);
+                user.password = await bcrypt.hash(user.password, salt);
+            }
+        },
+        beforeUpdate: async (user) => {
+            if (user.changed('password')) {
+                const salt = await bcrypt.genSalt(10);
+                user.password = await bcrypt.hash(user.password, salt);
+            }
+            user.updatedAt = new Date();
+        }
+    }
 });
+
+// Método para comparar senhas
+User.prototype.comparePassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Método para obter dados públicos do usuário (opcional)
+User.prototype.getPublicData = function () {
+    const values = Object.assign({}, this.get());
+    delete values.password;
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+};
 
 export default User;

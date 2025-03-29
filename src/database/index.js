@@ -1,20 +1,16 @@
+// database/index.js
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// 1. Crie a instância do Sequelize
-const sequelizeInstance = new Sequelize(
+export const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
-        dialect: 'postgres',
-        logging: console.log // Para ver os logs SQL
+        dialect: 'postgres'
     }
 );
-
-// 2. Exporte explicitamente como padrão
-export default sequelizeInstance;
