@@ -4,15 +4,13 @@ async function createController(req, res) {
     const { name, username, email, password, avatar } = req.body;
 
     try {
-
         if (!req.body.cpf) {
             return res.status(400).json({ error: "O campo CPF é obrigatório" });
         }
 
         const token = await userService.createUserService(req.body);
-        res.status(201).json(token);
+        return res.status(201).json(token); // Apenas um res.json()
 
-        res.status(201).send(token);
     } catch (e) {
         return res.status(400).send(e.message);
     }
