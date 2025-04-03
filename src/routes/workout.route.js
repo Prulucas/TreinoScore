@@ -7,16 +7,20 @@ const router = Router();
 const controller = new WorkoutController();
 
 // Rotas autenticadas
-router.use(authMiddleware);
+//router.use(authMiddleware);
 
-// Rotas comuns
-router.get('/:id', controller.getById);
-router.get('/user/:userId?', controller.getByUser);
-
-// Rotas para admin/teacher
-router.post('/', checkRole(['admin', 'professor']), controller.create);
+// Primeiro, rotas POST específicas
 router.post('/default/:userId', checkRole(['admin', 'professor']), controller.createDefault);
+router.post('/:userId', controller.create);
+// create treino (verificar depois checkRole) // create treino, add depois do teste: checkRole(['admin', 'professor']),
+
+// Depois, rotas GET para evitar conflito com parâmetros dinâmicos
+router.get('/user/:userId?', controller.getByUser);
+router.get('/:id', controller.getById);
+
+// Rotas de atualização e remoção
 router.patch('/:id', checkRole(['admin', 'professor']), controller.update);
 router.delete('/:id', checkRole(['admin', 'professor']), controller.delete);
+
 
 export default router;

@@ -7,8 +7,14 @@ export class WorkoutController {
 
     create = async (req, res) => {
         try {
+            const userId = req.params.userId || req.body.userId || req.userId;
+
+            if (!userId) {
+                return res.status(400).json({ message: "User ID é obrigatório" });
+            }
+
             const workout = await this.service.createWorkout(
-                { ...req.body, userId: req.body.userId || req.userId },
+                { ...req.body, userId },
                 req.userRole
             );
             res.status(201).json(workout);
@@ -16,6 +22,8 @@ export class WorkoutController {
             res.status(400).json({ message: error.message });
         }
     };
+
+
 
     getById = async (req, res) => {
         try {

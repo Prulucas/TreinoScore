@@ -22,24 +22,14 @@ async function authMiddleware(req, res, next) {
     jwt.verify(token, process.env.SECRET_JWT, async (err, decoded) => {
         if (err) return res.status(401).send({ message: "Invalid token!" });
 
-        const user = await userRepositories.findByIdRepository(decoded.id);
-        if (!user || !user.id) {
+        const user = await userRepositories.findById(decoded.id);
+        if (!user) {
             return res.status(401).send({ message: "Invalid token!" });
         }
 
         req.userId = user.id;
-        req.userRole = user.role || 'user';
         return next();
     });
 }
 
 export default authMiddleware;
-
-export function checkRole(requiredRole) {
-    return (req, res, next) => {
-        if (req.user.role === requiredRole || req.user.role === 'admin') {
-            return next();
-        }
-        return res.status(403).json({ message: 'Acesso não autorizado' });
-    };
-}

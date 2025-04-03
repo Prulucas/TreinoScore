@@ -1,7 +1,16 @@
 import User from "../models/User.js";
 
-const findByEmailUserRepository = (email) =>
-    User.findOne({ where: { email } });
+const findByEmailUserRepository = async (email) => {
+    const user = await User.findOne({
+        where: { email },
+        attributes: ["id", "name", "email", "password", "role"], // Garante que a senha vem junto
+    });
+
+    console.log("Usuário encontrado:", user); // Debug
+    return user;
+};
+
+
 
 const createUserRepository = (body) => User.create(body);
 
