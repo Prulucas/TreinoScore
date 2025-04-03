@@ -33,6 +33,8 @@ async function authMiddleware(req, res, next) {
     });
 }
 
+export default authMiddleware;
+
 export function checkRole(requiredRole) {
     return (req, res, next) => {
         if (req.user.role === requiredRole || req.user.role === 'admin') {
@@ -41,5 +43,3 @@ export function checkRole(requiredRole) {
         return res.status(403).json({ message: 'Acesso não autorizado' });
     };
 }
-
-export default { authMiddleware, checkRole };

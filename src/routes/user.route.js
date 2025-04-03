@@ -8,13 +8,15 @@ const router = Router();
 // Rotas públicas
 router.post('/create', userController.createController);
 
-// Rotas protegidas (requerem autenticação)
-router.use(authMiddleware);
+// Rotas autenticadas
+router.use(authMiddleware); // ← Middleware de autenticação para todas as rotas abaixo
 
+// Rotas que requerem autenticação
 router.get('/', userController.findAllController);
-router.get('/profile', userController.profileController);
-router.get('/findById/:id?', validId, userController.findByIdController);
-router.patch('/update/:id', validId, userController.updateController);
-router.delete('/delete/:id', validId, userController.deleteController);
+router.get('/findById/:id?', userController.findByIdController); // tem validId, dps do teste adicionar
+router.patch('/update/:id', userController.updateController);    // tem validId, dps do teste adicionar
+
+// somente o proprio usuário pode se deletar.
+// router.delete('/delete/:id', userController.deleteController);   // tem validId, dps do teste adicionar
 
 export default router;
