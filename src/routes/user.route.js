@@ -13,7 +13,7 @@ router.use(authMiddleware); // ← Middleware de autenticação para todas as ro
 
 // Rotas que requerem autenticação
 router.get('/', userController.findAllController);
-router.get('/findById/:id?', userController.findByIdController); // tem validId, dps do teste adicionar
+router.get('/findById/:id', userController.findByIdController); // tem validId, dps do teste adicionar
 router.patch('/update/:id', userController.updateController);    // tem validId, dps do teste adicionar
 
 // somente o proprio usuário pode se deletar.

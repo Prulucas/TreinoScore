@@ -4,14 +4,19 @@ import bcrypt from "bcrypt";
 import { WorkoutService } from './workout.service.js';
 
 const createUserService = async (body) => {
-    const { name, username, email, password, avatar, role } = body;
+    const { name, username, email, password, cpf, avatar, role } = body;
 
-    if (!name || !username || !email || !password || !avatar || !role) {
+    if (!name || !username || !email || !password || !cpf || !avatar || !role) {
         throw new Error("Submit all fields for registration");
     }
 
+    // Verifica se o e-mail já está cadastrado
     const foundUser = await userRepositories.findByEmailUserRepository(email);
-    if (foundUser) throw new Error("User already exists");
+    if (foundUser) throw new Error("User with this email already exists");
+
+    // Verifica se o CPF já está cadastrado
+    const foundUserByCpf = await userRepositories.findByCpfUserRepository(cpf);
+    if (foundUserByCpf) throw new Error("User with this CPF already exists");
 
     // Hash da senha antes de criar o usuário
     const salt = await bcrypt.genSalt(10);
@@ -23,12 +28,6 @@ const createUserService = async (body) => {
     });
 
     if (!user) throw new Error("Error creating User");
-
-    // Criar treino padrão para estudantes
-    if (user.role === 'aluno') {
-        const workoutService = new WorkoutService();
-        await workoutService.createDefaultWorkouts(user.id);
-    }
 
     const token = authService.generateToken(user.id);
 
@@ -43,6 +42,7 @@ const createUserService = async (body) => {
         }
     };
 };
+
 
 const findAllService = async () => {
     const users = await userRepositories.findAllRepository();

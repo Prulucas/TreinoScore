@@ -8,8 +8,11 @@ function generateToken(id) {
 }
 
 const loginService = async (email, password) => {
-    const user = await userRepositories.findByEmailUserRepository(email);
+    if (!email || !password) {
+        throw new Error("Email and password are required");
+    }
 
+    const user = await userRepositories.findByEmailUserRepository(email);
     if (!user) {
         throw new Error("User not found");
     }
@@ -23,7 +26,16 @@ const loginService = async (email, password) => {
         throw new Error("Invalid password");
     }
 
-    const token = authService.generateToken(user.id);
+    const token = generateToken(user.id);
+
+    console.log("Senha digitada:", password);
+    console.log("Senha armazenada:", user.password);
+    console.log("A senha é válida?", isPasswordValid);
+
+    if (!isPasswordValid) {
+        throw new Error("Invalid password");
+    }
+
 
     return {
         message: "Login successful",
@@ -36,7 +48,5 @@ const loginService = async (email, password) => {
         }
     };
 };
-
-
 
 export default { generateToken, loginService };

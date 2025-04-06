@@ -1,13 +1,8 @@
 import User from "../models/User.js";
 
 const findByEmailUserRepository = async (email) => {
-    const user = await User.findOne({
-        where: { email },
-        attributes: ["id", "name", "email", "password", "role"], // Garante que a senha vem junto
-    });
-
-    console.log("Usuário encontrado:", user); // Debug
-    return user;
+    const user = await User.findOne({ where: { email } });
+    return user || null; // Retorna null explicitamente se não encontrar o usuário
 };
 
 
@@ -23,11 +18,18 @@ const updateRepository = (id, body) =>
 
 const deleteRepository = (id) => User.destroy({ where: { id } });
 
+const findByCpfUserRepository = async (cpf) => {
+    const user = await User.findOne({ where: { cpf } });
+    return user || null; // Retorna null se não encontrar o usuário
+};
+
+
 export default {
     findByEmailUserRepository,
     createUserRepository,
     findAllRepository,
     findByIdRepository,
     updateRepository,
-    deleteRepository
+    deleteRepository,
+    findByCpfUserRepository
 };
