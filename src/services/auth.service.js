@@ -21,7 +21,7 @@ const loginService = async (email, password) => {
         throw new Error("No password set for this user");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
         throw new Error("Invalid password");
     }
@@ -31,11 +31,6 @@ const loginService = async (email, password) => {
     console.log("Senha digitada:", password);
     console.log("Senha armazenada:", user.password);
     console.log("A senha é válida?", isPasswordValid);
-
-    if (!isPasswordValid) {
-        throw new Error("Invalid password");
-    }
-
 
     return {
         message: "Login successful",
@@ -48,5 +43,6 @@ const loginService = async (email, password) => {
         }
     };
 };
+
 
 export default { generateToken, loginService };

@@ -1,8 +1,10 @@
 import User from "../models/User.js";
 
+
 const findByEmailUserRepository = async (email) => {
-    const user = await User.findOne({ where: { email } });
-    return user || null; // Retorna null explicitamente se não encontrar o usuário
+    return await User.findOne({
+        where: { email }
+    });
 };
 
 

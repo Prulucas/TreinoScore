@@ -18,14 +18,8 @@ const createUserService = async (body) => {
     const foundUserByCpf = await userRepositories.findByCpfUserRepository(cpf);
     if (foundUserByCpf) throw new Error("User with this CPF already exists");
 
-    // Hash da senha antes de criar o usuário
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user = await userRepositories.createUserRepository({
-        ...body,
-        password: hashedPassword
-    });
+    // Apenas cria o usuário, a senha será hasheada pelo hook
+    const user = await userRepositories.createUserRepository(body);
 
     if (!user) throw new Error("Error creating User");
 
@@ -42,7 +36,6 @@ const createUserService = async (body) => {
         }
     };
 };
-
 
 const findAllService = async () => {
     const users = await userRepositories.findAllRepository();
