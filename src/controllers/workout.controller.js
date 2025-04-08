@@ -5,6 +5,7 @@ export class WorkoutController {
         this.service = new WorkoutService();
     }
 
+    // workout.controller.js
     create = async (req, res) => {
         try {
             const userId = req.params.userId || req.body.userId || req.userId;
@@ -19,9 +20,11 @@ export class WorkoutController {
             );
             res.status(201).json(workout);
         } catch (error) {
+            console.error("Erro ao criar treino:", error);
             res.status(400).json({ message: error.message });
         }
     };
+
 
 
 

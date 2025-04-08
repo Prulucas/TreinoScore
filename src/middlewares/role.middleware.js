@@ -1,5 +1,5 @@
-import { Workout } from '../models/Workout.js';
-import { User } from '../models/User.js';
+import Workout from '../models/Workout.js';
+import User from '../models/User.js';
 
 // Middleware para verificar se é professor ou admin
 export const isTeacherOrAdmin = async (req, res, next) => {

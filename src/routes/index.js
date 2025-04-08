@@ -8,6 +8,6 @@ const router = Router();
 // Definição de rotas
 router.use('/user', userRouter);
 router.use('/auth', authRouter);
-router.use('/workout', workoutRouter); // Adicionando rotas de treino se existirem
+router.use('/workout', workoutRouter);
 
 export default router;

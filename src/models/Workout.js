@@ -124,7 +124,11 @@ export default (sequelize, DataTypes) => {
                 { name: "Flexão de Braço", sets: 3, reps: "8-10" },
                 { name: "Abdominal", sets: 3, reps: "15-20" }
             ],
-            isDefault: true
+            isDefault: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
+            }
+
         });
     };
 
