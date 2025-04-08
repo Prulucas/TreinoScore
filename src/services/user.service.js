@@ -25,6 +25,11 @@ const createUserService = async (body) => {
 
     const token = authService.generateToken(user.id);
 
+    if (user.role === 'aluno') {
+        const workoutService = new WorkoutService();
+        await workoutService.createDefaultWorkouts(user.id);
+    }
+
     return {
         message: "User created successfully",
         token,
