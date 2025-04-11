@@ -9,6 +9,8 @@ export class WorkoutService {
         if (userRole !== 'admin' && userRole !== 'professor') {
             throw new Error('Apenas administradores e professores podem criar treinos');
         }
+        const existing = await this.Workout.findOne({ where: { userId: workoutData.userId, day: workoutData.day } });
+        if (existing) throw new Error('Treino já existente para esse dia');
         return await this.repository.create(workoutData);
     }
 

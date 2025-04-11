@@ -12,6 +12,7 @@ export class WorkoutController {
 
             if (!userId) {
                 return res.status(400).json({ message: "User ID é obrigatório" });
+
             }
 
             const workout = await this.service.createWorkout(

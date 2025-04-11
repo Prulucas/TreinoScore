@@ -18,7 +18,7 @@ router.post('/create/:userId', checkRole(['admin', 'professor']), controller.cre
 
 // Depois, rotas GET para evitar conflito com parâmetros dinâmicos
 router.get('/byuser/:userId?', controller.getByUser);
-router.get('getworkout/:id', controller.getById); //buscar treino por id
+router.get('/getworkout/:id', controller.getById); //buscar treino por id
 
 // Rotas de atualização e remoção
 router.patch('/update/:id', checkRole(['admin', 'professor']), controller.update);

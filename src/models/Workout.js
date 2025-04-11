@@ -123,11 +123,7 @@ export default (sequelize, DataTypes) => {
                 { name: "Agachamento Livre", sets: 3, reps: "10-12" },
                 { name: "Flexão de Braço", sets: 3, reps: "8-10" },
                 { name: "Abdominal", sets: 3, reps: "15-20" }
-            ],
-            isDefault: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: false
-            }
+            ]
 
         });
     };

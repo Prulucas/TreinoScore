@@ -143,7 +143,6 @@ export class WorkoutRepository {
                     description: `Treino padrão - ${workout.title}`,
                     day: workout.day,
                     exercises: workout.exercises,
-                    isDefault: true,
                     status: 'active'
                 }, { transaction });
 
