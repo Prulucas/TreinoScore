@@ -1,32 +1,28 @@
 import { WorkoutService } from '../services/workout.service.js';
+import User from '../models/User.js';
+import Workout from '../models/Workout.js';
 
 export class WorkoutController {
     constructor() {
-        this.service = new WorkoutService();
+        this.service = new WorkoutService;
     }
 
-    // workout.controller.js
-    create = async (req, res) => {
+    create = async (req, res) => { // Use arrow function para manter o 'this'
         try {
-            const userId = req.params.userId || req.body.userId || req.userId;
+            const workoutData = {
+                ...req.body,
+                userId: req.params.userId
+            };
 
-            if (!userId) {
-                return res.status(400).json({ message: "User ID é obrigatório" });
-
-            }
-
-            const workout = await this.service.createWorkout(
-                { ...req.body, userId },
-                req.userRole
-            );
-            res.status(201).json(workout);
+            const result = await this.service.createWorkout(workoutData);
+            res.status(201).json(result);
         } catch (error) {
-            console.error("Erro ao criar treino:", error);
-            res.status(400).json({ message: error.message });
+            res.status(400).json({
+                message: error.message,
+                error: "VALIDATION_ERROR"
+            });
         }
-    };
-
-
+    }
 
 
     getById = async (req, res) => {

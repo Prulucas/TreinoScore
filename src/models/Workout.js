@@ -1,4 +1,3 @@
-// src/models/Workout.js
 export default (sequelize, DataTypes) => {
     const Workout = sequelize.define('Workout', {
         id: {
@@ -69,6 +68,9 @@ export default (sequelize, DataTypes) => {
                         if (!ex.reps || typeof ex.reps !== 'string') {
                             throw new Error(`Exercício ${index + 1}: Repetições são obrigatórias (ex: "8-12")`);
                         }
+                        if (ex.rest && (!Number.isInteger(ex.rest) || ex.rest < 30 || ex.rest > 180)) {
+                            throw new Error(`Exercício ${index + 1}: O descanso (rest) deve ser entre 30 e 180 segundos`);
+                        }
                     });
                 }
             }
@@ -115,17 +117,43 @@ export default (sequelize, DataTypes) => {
 
     // Método estático para criar treino padrão
     Workout.createDefault = async (userId) => {
-        return Workout.create({
-            userId,
-            title: "Treino Inicial",
-            day: 1,
-            exercises: [
-                { name: "Agachamento Livre", sets: 3, reps: "10-12" },
-                { name: "Flexão de Braço", sets: 3, reps: "8-10" },
-                { name: "Abdominal", sets: 3, reps: "15-20" }
-            ]
+        const defaultWorkouts = [
+            {
+                day: 1,
+                title: "Peito e Tríceps",
+                exercises: [
+                    { name: "Supino Reto", sets: 4, reps: "8-12", rest: 90 },
+                    { name: "Supino Inclinado", sets: 3, reps: "10-12", rest: 90 },
+                    { name: "Crucifixo", sets: 3, reps: "12-15", rest: 60 },
+                    { name: "Tríceps Testa", sets: 3, reps: "10-12", rest: 60 },
+                    { name: "Tríceps Corda", sets: 3, reps: "12-15", rest: 60 }
+                ]
+            },
+            // Outros treinos para os outros dias...
+        ];
 
-        });
+        const transaction = await sequelize.transaction();
+        try {
+            const createdWorkouts = [];
+            for (const workout of defaultWorkouts) {
+                const created = await Workout.create({
+                    userId,
+                    title: workout.title,
+                    description: `Treino padrão - ${workout.title}`,
+                    day: workout.day,
+                    exercises: workout.exercises,
+                    status: 'active'
+                }, { transaction });
+
+                createdWorkouts.push(created);
+            }
+
+            await transaction.commit();
+            return createdWorkouts;
+        } catch (error) {
+            await transaction.rollback();
+            throw new Error('Erro ao criar os treinos padrão');
+        }
     };
 
     return Workout;

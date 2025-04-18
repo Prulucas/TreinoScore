@@ -6,19 +6,31 @@ export class WorkoutRepository {
     }
 
     async create(workoutData) {
-        try {
-            return await this.Workout.create(workoutData);
-        } catch (error) {
-            console.error('Error creating workout:', error);
-            throw new Error('Failed to create workout');
-        }
+        return await this.Workout.create(workoutData);
+    }
+
+    async findOneByDay(userId, day) {
+        return await this.Workout.findOne({
+            where: { userId, day }
+        });
     }
 
     async findById(id) {
         try {
-            return await this.Workout.findByPk(id);
+            return await this.Workout.findByPk(id); // Utilizando findByPk já que estamos buscando pelo ID
         } catch (error) {
             console.error('Error finding workout by id:', error);
+            throw new Error('Failed to find workout');
+        }
+    }
+
+    async findOne(criteria) {
+        try {
+            return await this.Workout.findOne({
+                where: criteria // Já recebe o objeto formatado corretamente
+            });
+        } catch (error) {
+            console.error('Error finding workout by criteria:', error);
             throw new Error('Failed to find workout');
         }
     }
@@ -27,7 +39,7 @@ export class WorkoutRepository {
         try {
             return await this.Workout.findAll({
                 where: { userId },
-                ...options
+                ...options,
             });
         } catch (error) {
             console.error('Error finding workouts by user:', error);

@@ -17,19 +17,46 @@ const sequelize = new Sequelize({
     logging: process.env.NODE_ENV === 'development' ? console.log : false
 });
 
-// Teste de conexão (sem sincronização aqui)
-try {
-    await sequelize.authenticate();
-    console.log('✅ Conexão com PostgreSQL estabelecida!');
-} catch (error) {
-    console.error('❌ Falha na conexão com o banco:', error);
-    process.exit(1);
-}
-
-const db = {
-    Workout: workoutModel(sequelize, Sequelize.DataTypes),
-    sequelize,
-    Sequelize
+// Modelos
+const models = {
+    Workout: workoutModel(sequelize, Sequelize.DataTypes)
+    // Adicione outros modelos aqui quando necessário
 };
 
-export default db;
+// Conexão e associações
+const initializeDatabase = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('✅ Conexão com PostgreSQL estabelecida!');
+
+        // Configura associações dos modelos
+        Object.values(models).forEach(model => {
+            if (model.associate) {
+                model.associate(models);
+            }
+        });
+
+        // Sincronização opcional (recomendado apenas para desenvolvimento)
+        if (process.env.NODE_ENV === 'development') {
+            await sequelize.sync({ alter: true });
+            console.log('🔁 Modelos sincronizados com o banco');
+        }
+
+    } catch (error) {
+        console.error('❌ Falha na inicialização do banco:', error);
+        process.exit(1);
+    }
+};
+
+// Exportações
+export {
+    sequelize,
+    models,
+    initializeDatabase
+};
+
+export default {
+    sequelize,
+    ...models,
+    initializeDatabase
+};
