@@ -1,0 +1,12 @@
+
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=db.ksgzlkjvyazedntjlwee.supabase.co  # Host fornecido pelo Supabase
+DB_PORT=5432  # Porta padrão do PostgreSQL
+
+# Para conexão via Pooling
+DATABASE_URL="postgresql://postgres:postgres@aws-0-us-east-1.pooler.supabase.com:6543/tcc_db?pgbouncer=true"
+
+# Para conexão direta (geralmente para migrations)
+DIRECT_URL="postgresql://postgres:postgres@aws-0-us-east-1.pooler.supabase.com:5432/tcc_db"

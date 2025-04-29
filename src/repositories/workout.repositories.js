@@ -178,4 +178,24 @@ export class WorkoutRepository {
             throw new Error('Failed to count workouts');
         }
     }
+
+    // No workoutRepositories.js
+    async deleteByUserId(userId) {
+        try {
+            // Mudança de db.workouts para db.Workout
+            return await db.Workout.destroy({
+                where: {
+                    userId: userId
+                }
+            });
+        } catch (error) {
+            console.error('Error deleting workouts by userId:', error);
+            throw new Error('Failed to delete workouts');
+        }
+    }
+
+
 }
+
+const workoutRepository = new WorkoutRepository();
+export default workoutRepository;

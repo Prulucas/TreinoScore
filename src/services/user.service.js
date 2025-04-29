@@ -1,4 +1,5 @@
 import userRepositories from "../repositories/user.repositories.js";
+import { WorkoutRepository } from "../repositories/workout.repositories.js"
 import authService from "../services/auth.service.js";
 import bcrypt from "bcrypt";
 import { WorkoutService } from './workout.service.js';
@@ -57,7 +58,7 @@ const findByIdService = async (userId, userIdLogged) => {
     return user;
 };
 
-const updateService = async (body, userId, userIdLogged) => {
+const updateService = async (body, userId, userIdLogged, userRole) => {
     const { name, username, email, password, avatar } = body;
 
     if (!name && !username && !email && !password && !avatar) {
@@ -67,12 +68,11 @@ const updateService = async (body, userId, userIdLogged) => {
     const user = await userRepositories.findByIdRepository(userId);
     if (!user) throw new Error("User not found");
 
-    // Verificar se o usuário logado é o mesmo que está sendo atualizado
-    if (user.id !== userIdLogged) {
+    // Agora deixa admins atualizarem qualquer usuário
+    if (user.id !== userIdLogged && userRole !== 'admin') {
         throw new Error("You cannot update this user");
     }
 
-    // Se estiver atualizando a senha, faz o hash
     if (password) {
         const salt = await bcrypt.genSalt(10);
         body.password = await bcrypt.hash(password, salt);
@@ -82,20 +82,38 @@ const updateService = async (body, userId, userIdLogged) => {
     return { message: "User successfully updated" };
 };
 
-const deleteService = async (id, userIdLogged, userRole) => {
+const deleteService = async (id, userIdLogged, userRole, password) => {
     const user = await userRepositories.findByIdRepository(id);
     if (!user) {
         throw new Error("User not found");
     }
 
-    // Apenas admin pode deletar outros usuários ou o próprio usuário pode se deletar
-    if (userRole !== 'admin' && id !== userIdLogged) {
+    // Verifica se o ID do usuário logado corresponde ao ID do usuário a ser deletado
+    const userIdToDelete = String(id);
+    const loggedUserId = String(userIdLogged);
+
+    if (userIdToDelete !== loggedUserId) {
         throw new Error("You cannot delete this user");
     }
 
-    await userRepositories.deleteRepository(id);
-    return { message: "User deleted successfully" };
+    // Verifica se a senha está correta
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+        throw new Error("Incorrect password");
+    }
+
+    // ⚠️ Crie a instância corretamente
+    const workoutRepository = new WorkoutRepository();
+
+    // ⚠️ Delete os treinos do usuário
+    await workoutRepository.deleteByUserId(id); // id deve estar como número, se for esse o tipo no banco
+
+    // Deletar o usuário
+    await userRepositories.deleteRepository(userIdToDelete);
+
+    return { message: "User and associated workouts deleted successfully" };
 };
+
 
 const profileService = async (userId) => {
     const user = await userRepositories.findByIdRepository(userId);

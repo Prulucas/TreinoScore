@@ -1,8 +1,8 @@
-import { WorkoutRepository } from '../repositories/workout.repositories.js';
+import WorkoutRepository from '../repositories/workout.repositories.js';
 
 export class WorkoutService {
     constructor() {
-        this.repository = new WorkoutRepository();
+        this.repository = WorkoutRepository;
     }
 
     async createWorkout(workoutData) {
