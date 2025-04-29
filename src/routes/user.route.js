@@ -2,6 +2,7 @@ import { Router } from 'express';
 import userController from '../controllers/user.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { verifyAdminOrOwner } from '../middlewares/global.middleware.js';
+import { checkRole } from '../middlewares/role.middleware.js';
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.post('/create', userController.createController);
 router.use(authMiddleware); // ← Middleware de autenticação para todas as rotas abaixo
 
 // Rotas que requerem autenticação
-router.get('/getall', userController.findAllController);
+router.get('/getall', checkRole(['admin', 'professor']), userController.findAllController);
 
 
 router.get('/findById/:id', userController.findByIdController); // tem validId, dps do teste adicionar
