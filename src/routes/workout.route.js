@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { WorkoutController } from '../controllers/workout.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { checkRole } from '../middlewares/role.middleware.js';
-import { verifyOwnerByUserId } from '../middlewares/global.middleware.js';
+import { verifyAdminOrOwner, verifyWorkoutAccess } from '../middlewares/global.middleware.js';
 
 const router = Router();
 const controller = new WorkoutController();
@@ -22,11 +22,12 @@ router.post('/create/:userId', checkRole(['admin', 'professor']), controller.cre
 
 // Retorna treinos de um usuário específico (se não passar userId, pode listar do usuário logado)
 // Ex: GET /byuser/6 vai retornar treinos do userId 6
-router.get('/workoutbyuser/:userId', checkRole(['admin', 'professor']), verifyOwnerByUserId, controller.getByUser);
+router.get('/workoutbyuser/:userId', authMiddleware, verifyAdminOrOwner, controller.getByUser); // testado
 
 // Retorna os detalhes de um treino específico pelo seu ID
 // Ex: GET /getworkout/10 vai retornar o treino com id 10
-router.get('/getworkout/:id', controller.getById);
+router.get('/getworkout/:id', authMiddleware, verifyWorkoutAccess, controller.getById); // retorna para o professor
+
 
 // ROTAS DE ATUALIZAÇÃO E REMOÇÃO
 

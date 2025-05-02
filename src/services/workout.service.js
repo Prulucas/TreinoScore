@@ -50,36 +50,34 @@ export class WorkoutService {
         }
     }
 
-    async getWorkoutById(id, userId, userRole) {
+    getWorkoutById = async (workoutId) => {
         try {
-            const workout = await this.repository.findById(id);
+            const workout = await this.WorkoutModel.findOne({
+                where: { id: workoutId }
+            });
 
-            if (!workout) {
-                throw new Error('Treino não encontrado');
-            }
-
-            if (userRole !== 'admin' && userRole !== 'professor' && workout.userId !== userId) {
-                throw new Error('Acesso não autorizado');
-            }
-
-            return workout;
+            return workout ? workout : null;
         } catch (error) {
-            console.error('Erro ao buscar treino:', error);
-            throw error;
+            throw new Error('Erro ao buscar treino');
         }
-    }
+    };
+
 
     async getUserWorkouts(userId) {
         try {
-            // Agora usa o modelo certo da classe
             const workouts = await this.WorkoutModel.findAll({
                 where: { userId: userId },
             });
 
-            return workouts;
+            if (workouts.length === 0) {
+                console.log("Nenhum treino encontrado para o usuário:", userId);
+            }
+
+            const workoutData = workouts.map(workout => workout.toJSON());
+            return workoutData;
         } catch (error) {
             console.error('Erro ao buscar treinos:', error);
-            throw new Error('Falha ao buscar treinos');
+            throw new Error(`Falha ao buscar treinos: ${error.message}`);
         }
     }
 
@@ -112,24 +110,44 @@ export class WorkoutService {
     }
 
     async deleteWorkout(id, userId, userRole) {
-        const transaction = await this.repository.getTransaction();
+        const transaction = await sequelizeInstance.transaction();
         try {
+            // Busca o treino
             const workout = await this.repository.findById(id);
 
             if (!workout) {
                 throw new Error('Treino não encontrado');
             }
 
+            // Logs para depuração
+            console.log('ID do treino:', id);
+            console.log('User ID do login:', userId);
+            console.log('User Role do login:', userRole);
+            console.log('ID do treino no banco:', workout.userId);
+
+            // Verificação de permissões
             if (userRole !== 'admin' && userRole !== 'professor' && workout.userId !== userId) {
-                throw new Error('Acesso não autorizado');
+                if (userRole === 'professor' && workout.userId !== userId) {
+                    throw new Error('Acesso não autorizado');
+                }
             }
 
+            // Deleta o treino
             await this.repository.delete(id, { transaction });
+
+            // Confirma a transação
             await transaction.commit();
+
+            // Retorna resposta com status 200 e mensagem
+            res.status(200).json({ message: 'Treino deletado com sucesso.' });
 
             return true;
         } catch (error) {
-            await transaction.rollback();
+            // Caso ocorra um erro, desfaz a transação
+            if (transaction._state !== 'commit') {
+                await transaction.rollback();
+            }
+
             console.error('Erro ao deletar treino:', error);
             throw error;
         }
