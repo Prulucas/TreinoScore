@@ -1,34 +1,32 @@
 import WorkoutRepository from '../repositories/workout.repositories.js';
+import sequelizeInstance from '../database/db.js';
+import db from '../models/Index.js'; // importa tudo do seu arquivo acima
 
 export class WorkoutService {
     constructor() {
         this.repository = WorkoutRepository;
+        this.WorkoutModel = db.Workout; // ✅ agora pega o modelo certo aqui e evita conflito
     }
 
     async createWorkout(workoutData) {
         try {
-            // Verificação básica de dados obrigatórios
             if (!workoutData.userId) {
                 throw new Error('ID do usuário é obrigatório');
             }
 
-            // Validação do dia
             if (!Number.isInteger(workoutData.day) || workoutData.day < 1 || workoutData.day > 7) {
                 throw new Error('Dia inválido. Deve ser entre 1 (segunda) e 7 (domingo)');
             }
 
-            // Validação dos exercícios
             if (!Array.isArray(workoutData.exercises) || workoutData.exercises.length === 0) {
                 throw new Error('Deve ser fornecido um array com pelo menos um exercício');
             }
 
-            // Verifica duplicidade de treino no mesmo dia
             const existing = await this.repository.findOneByDay(workoutData.userId, workoutData.day);
             if (existing) {
                 throw new Error('Já existe um treino cadastrado para este dia');
             }
 
-            // Validação da estrutura dos exercícios
             workoutData.exercises.forEach((ex, index) => {
                 if (!ex.name || typeof ex.name !== 'string' || !ex.name.trim()) {
                     throw new Error(`Exercício ${index + 1}: Nome inválido`);
@@ -44,12 +42,11 @@ export class WorkoutService {
                 }
             });
 
-            // Cria o treino no banco de dados
             return await this.repository.create(workoutData);
 
         } catch (error) {
             console.error('[WorkoutService] Erro ao criar treino:', error.message);
-            throw error; // Propaga o erro para o controller
+            throw error;
         }
     }
 
@@ -61,7 +58,6 @@ export class WorkoutService {
                 throw new Error('Treino não encontrado');
             }
 
-            // Verificação de permissão
             if (userRole !== 'admin' && userRole !== 'professor' && workout.userId !== userId) {
                 throw new Error('Acesso não autorizado');
             }
@@ -75,15 +71,20 @@ export class WorkoutService {
 
     async getUserWorkouts(userId) {
         try {
-            return await this.repository.findByUserId(userId);
+            // Agora usa o modelo certo da classe
+            const workouts = await this.WorkoutModel.findAll({
+                where: { userId: userId },
+            });
+
+            return workouts;
         } catch (error) {
-            console.error('Erro ao buscar treinos do usuário:', error);
+            console.error('Erro ao buscar treinos:', error);
             throw new Error('Falha ao buscar treinos');
         }
     }
 
     async updateWorkout(id, workoutData, userId, userRole) {
-        const transaction = await this.repository.getTransaction();
+        const transaction = await sequelizeInstance.transaction();
         try {
             const workout = await this.repository.findById(id);
 
@@ -91,12 +92,10 @@ export class WorkoutService {
                 throw new Error('Treino não encontrado');
             }
 
-            // Verificação de permissão
             if (userRole !== 'admin' && userRole !== 'professor' && workout.userId !== userId) {
                 throw new Error('Acesso não autorizado');
             }
 
-            // Validações adicionais podem ser adicionadas aqui
             if (workoutData.day && (workoutData.day < 1 || workoutData.day > 7)) {
                 throw new Error('Dia do treino inválido');
             }
@@ -121,7 +120,6 @@ export class WorkoutService {
                 throw new Error('Treino não encontrado');
             }
 
-            // Verificação de permissão
             if (userRole !== 'admin' && userRole !== 'professor' && workout.userId !== userId) {
                 throw new Error('Acesso não autorizado');
             }

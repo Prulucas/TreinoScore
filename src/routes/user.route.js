@@ -16,7 +16,7 @@ router.use(authMiddleware); // ← Middleware de autenticação para todas as ro
 router.get('/getall', checkRole(['admin', 'professor']), userController.findAllController);
 
 
-router.get('/findById/:id', userController.findByIdController); // tem validId, dps do teste adicionar
+router.get('/findById/:id', checkRole(['admin', 'professor']), userController.findByIdController); // tem validId, dps do teste adicionar
 // tem validId, dps do teste adicionar
 
 

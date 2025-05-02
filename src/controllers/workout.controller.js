@@ -41,12 +41,20 @@ export class WorkoutController {
 
     getByUser = async (req, res) => {
         try {
-            const workouts = await this.service.getUserWorkouts(
-                req.params.userId || req.userId
-            );
+            const userIdToFind = parseInt(req.params.userId);  // Pega o 29 da URL
+            const requesterId = req.user.id;  // Quem está logado (27)
+            const requesterRole = req.user.role;
+
+            // Se não for admin ou professor, só pode buscar o próprio treino
+            if (requesterRole !== 'admin' && requesterRole !== 'professor' && requesterId !== userIdToFind) {
+                return res.status(403).json({ message: 'Acesso não autorizado' });
+            }
+
+            const workouts = await this.service.getUserWorkouts(userIdToFind);
             res.json(workouts);
+
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({ message: error.message || 'Erro ao buscar treinos' });
         }
     };
 
@@ -55,8 +63,8 @@ export class WorkoutController {
             const workout = await this.service.updateWorkout(
                 req.params.id,
                 req.body,
-                req.userId,
-                req.userRole
+                req.user.id,     // Acesso corrigido
+                req.user.role    // Acesso corrigido
             );
             res.json(workout);
         } catch (error) {
@@ -64,6 +72,7 @@ export class WorkoutController {
                 .json({ message: error.message });
         }
     };
+
 
     delete = async (req, res) => {
         try {

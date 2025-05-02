@@ -88,58 +88,58 @@ export class WorkoutRepository {
     async createDefaultWorkouts(userId) {
         const defaultWorkouts = [
             {
-                day: 1, // Segunda-feira - Peito e Tríceps
-                title: "Peito e Tríceps",
+                day: 1,
+                title: "Treino 1",
                 exercises: [
-                    { name: "Supino Reto", sets: 4, reps: "8-12", rest: 90 },
-                    { name: "Supino Inclinado", sets: 3, reps: "10-12", rest: 90 },
-                    { name: "Crucifixo", sets: 3, reps: "12-15", rest: 60 },
-                    { name: "Tríceps Testa", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Tríceps Corda", sets: 3, reps: "12-15", rest: 60 }
+                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
                 ]
             },
             {
-                day: 2, // Terça-feira - Costas e Bíceps
-                title: "Costas e Bíceps",
+                day: 2,
+                title: "Treino 2",
                 exercises: [
-                    { name: "Barra Fixa", sets: 4, reps: "6-10", rest: 90 },
-                    { name: "Remada Curvada", sets: 3, reps: "8-12", rest: 90 },
-                    { name: "Puxada Alta", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Rosca Direta", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Rosca Martelo", sets: 3, reps: "12-15", rest: 60 }
+                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
                 ]
             },
             {
-                day: 3, // Quarta-feira - Perna Completa
-                title: "Pernas",
+                day: 3,
+                title: "Treino 3",
                 exercises: [
-                    { name: "Agachamento Livre", sets: 4, reps: "8-12", rest: 120 },
-                    { name: "Leg Press", sets: 3, reps: "10-12", rest: 90 },
-                    { name: "Cadeira Extensora", sets: 3, reps: "12-15", rest: 60 },
-                    { name: "Mesa Flexora", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Panturrilha Sentado", sets: 4, reps: "15-20", rest: 45 }
+                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
                 ]
             },
             {
-                day: 4, // Quinta-feira - Ombros e Trapézio
-                title: "Ombros e Trapézio",
+                day: 4,
+                title: "Treino 4",
                 exercises: [
-                    { name: "Desenvolvimento Militar", sets: 4, reps: "8-12", rest: 90 },
-                    { name: "Elevação Lateral", sets: 3, reps: "12-15", rest: 60 },
-                    { name: "Elevação Frontal", sets: 3, reps: "12-15", rest: 60 },
-                    { name: "Encolhimento com Barra", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Remada Alta", sets: 3, reps: "10-12", rest: 60 }
+                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
                 ]
             },
             {
-                day: 5, // Sexta-feira - Full Body
-                title: "Full Body",
+                day: 5,
+                title: "Treino 5",
                 exercises: [
-                    { name: "Agachamento Sumô", sets: 3, reps: "10-12", rest: 90 },
-                    { name: "Supino Reto", sets: 3, reps: "8-10", rest: 90 },
-                    { name: "Barra Fixa", sets: 3, reps: "6-8", rest: 90 },
-                    { name: "Desenvolvimento Arnold", sets: 3, reps: "10-12", rest: 60 },
-                    { name: "Abdominal Infra", sets: 3, reps: "15-20", rest: 45 }
+                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
+                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
                 ]
             }
         ];
@@ -179,7 +179,6 @@ export class WorkoutRepository {
         }
     }
 
-    // No workoutRepositories.js
     async deleteByUserId(userId) {
         try {
             // Mudança de db.workouts para db.Workout
