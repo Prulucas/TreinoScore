@@ -91,55 +91,55 @@ export class WorkoutRepository {
                 day: 1,
                 title: "Treino 1",
                 exercises: [
-                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
+                    { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
                 ]
             },
             {
                 day: 2,
                 title: "Treino 2",
                 exercises: [
-                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
+                    { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
                 ]
             },
             {
                 day: 3,
                 title: "Treino 3",
                 exercises: [
-                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
+                    { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
                 ]
             },
             {
                 day: 4,
                 title: "Treino 4",
                 exercises: [
-                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
+                    { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
                 ]
             },
             {
                 day: 5,
                 title: "Treino 5",
                 exercises: [
-                    { name: "Exercício 1", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 2", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 3", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 4", sets: 0, reps: "0-0", rest: 0 },
-                    { name: "Exercício 5", sets: 0, reps: "0-0", rest: 0 }
+                    { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
+                    { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
                 ]
             }
         ];

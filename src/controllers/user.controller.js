@@ -40,40 +40,60 @@ async function findByIdController(req, res) {
 async function updateController(req, res) {
     try {
         const { name, username, email, password, avatar } = req.body;
-        const { id: userId } = req.params;
-        const { id: userIdLogged, role } = req.user; // 👈 pega role também
+        const { userId } = req.params; // Agora usamos userId de req.params
+        const user = req.user;
+
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized: missing user data" });
+        }
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID param is missing" });
+        }
 
         const response = await userService.updateService(
             { name, username, email, password, avatar },
             userId,
-            userIdLogged,
-            role // 👈 passa role
+            user.id,
+            user.role
         );
 
-        return res.send(response);
+        return res.status(200).json(response);
     } catch (e) {
-        res.status(400).send({ message: e.message });
+        console.error("Update error:", e.message);
+        res.status(400).json({ message: e.message });
     }
 }
 
-
 async function deleteController(req, res) {
     try {
-        const { id: userId } = req.params;
-        const { password } = req.body; // Solicita a senha
+        const { userId } = req.params; // Usamos userId de req.params
+        const { password } = req.body;
+        const user = req.user;
 
-        const { id: userIdLogged, role } = req.user;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized: missing user data" });
+        }
 
-        // Verifica se a senha foi enviada
+        if (!userId) {
+            return res.status(400).json({ message: "User ID param is missing" });
+        }
+
         if (!password) {
             return res.status(400).json({ message: "Password is required to delete account" });
         }
 
-        const response = await userService.deleteService(userId, userIdLogged, role, password);
+        const response = await userService.deleteService(
+            userId,
+            user.id,
+            user.role,
+            password
+        );
 
-        return res.send(response);
+        return res.status(200).json(response);
     } catch (e) {
-        res.status(400).send({ message: e.message });
+        console.error("Delete error:", e.message);
+        res.status(400).json({ message: e.message });
     }
 }
 

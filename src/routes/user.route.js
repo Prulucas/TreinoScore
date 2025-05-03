@@ -21,7 +21,7 @@ router.get('/findById/:id', checkRole(['admin', 'professor']), userController.fi
 
 
 // somente o proprio usuário pode se deletar.
-router.patch('/update/:id', verifyAdminOrOwner, userController.updateController);
-router.delete('/delete/:id', verifyAdminOrOwner, userController.deleteController);   // tem validId, dps do teste adicionar
+router.patch('/update/:userId', verifyAdminOrOwner, userController.updateController); // arrumar controller baseado no middleware
+router.delete('/delete/:userId', verifyAdminOrOwner, userController.deleteController);   //  arrumar controller baseado no middleware
 
 export default router;
