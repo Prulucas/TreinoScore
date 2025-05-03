@@ -1,8 +1,22 @@
+/**
+ * ================================================================
+ * Arquivo: User.js
+ * Autor: Pedro Lucas
+ * Ano: 2025
+ * GitHub: https://github.com/Prulucas
+ * ================================================================
+ *
+ * Descrição:
+ * Este arquivo define o modelo `User` utilizando Sequelize para 
+ * representar usuários do sistema. Inclui validações, criptografia 
+ * de senha com bcrypt, e métodos para autenticação.
+ */
 
-import { DataTypes } from 'sequelize';
-import bcrypt from 'bcrypt';
-import { sequelize } from '../database/index.js';
+import { DataTypes } from 'sequelize'; // Tipos do Sequelize
+import bcrypt from 'bcrypt'; // Biblioteca para criptografar senhas
+import { sequelize } from '../database/index.js'; // Instância Sequelize
 
+// Define o modelo User
 const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
@@ -13,9 +27,7 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            notEmpty: {
-                msg: 'O nome não pode estar vazio'
-            },
+            notEmpty: { msg: 'O nome não pode estar vazio' },
             len: {
                 args: [2, 255],
                 msg: 'O nome deve ter entre 2 e 255 caracteres'
@@ -25,13 +37,9 @@ const User = sequelize.define('User', {
     username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: {
-            msg: 'Este nome de usuário já está em uso'
-        },
+        unique: { msg: 'Este nome de usuário já está em uso' },
         validate: {
-            notEmpty: {
-                msg: 'O username não pode estar vazio'
-            },
+            notEmpty: { msg: 'O username não pode estar vazio' },
             len: {
                 args: [3, 255],
                 msg: 'O username deve ter entre 3 e 255 caracteres'
@@ -41,25 +49,17 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: {
-            msg: 'Este email já está cadastrado'
-        },
+        unique: { msg: 'Este email já está cadastrado' },
         validate: {
-            isEmail: {
-                msg: 'Por favor, insira um email válido'
-            },
-            notEmpty: {
-                msg: 'O email não pode estar vazio'
-            }
+            isEmail: { msg: 'Por favor, insira um email válido' },
+            notEmpty: { msg: 'O email não pode estar vazio' }
         }
     },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            notEmpty: {
-                msg: 'A senha não pode estar vazia'
-            },
+            notEmpty: { msg: 'A senha não pode estar vazia' },
             len: {
                 args: [6, 255],
                 msg: 'A senha deve ter pelo menos 6 caracteres'
@@ -71,16 +71,12 @@ const User = sequelize.define('User', {
         allowNull: false,
         unique: true,
         validate: {
-            notNull: {
-                msg: "CPF é obrigatório"
-            },
+            notNull: { msg: "CPF é obrigatório" },
             len: {
                 args: [11, 11],
                 msg: "CPF deve ter exatamente 11 caracteres"
             },
-            isNumeric: {
-                msg: "CPF deve conter apenas números"
-            }
+            isNumeric: { msg: "CPF deve conter apenas números" }
         }
     },
     avatar: {
@@ -118,31 +114,39 @@ const User = sequelize.define('User', {
         }
     }
 }, {
-    tableName: 'Users',
-    timestamps: true,
+    tableName: 'Users', // Nome da tabela no banco
+    timestamps: true,   // Adiciona createdAt e updatedAt
     hooks: {
+        // Hook para criptografar senha antes de criar usuário
         beforeCreate: async (user) => {
             if (user.password) {
                 const salt = await bcrypt.genSalt(10);
                 user.password = await bcrypt.hash(user.password, salt);
             }
         },
+        // Hook para criptografar senha antes de atualizar usuário
         beforeUpdate: async (user) => {
             if (user.changed('password')) {
                 const salt = await bcrypt.genSalt(10);
                 user.password = await bcrypt.hash(user.password, salt);
             }
-            user.updatedAt = new Date();
+            user.updatedAt = new Date(); // Atualiza data de modificação
         }
     }
 });
 
-// Método para comparar senhas
+/**
+ * Método da instância do modelo:
+ * Compara uma senha informada com a senha criptografada do usuário.
+ */
 User.prototype.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Método para obter dados públicos do usuário (opcional)
+/**
+ * Método da instância do modelo:
+ * Retorna os dados públicos do usuário, ocultando a senha e datas.
+ */
 User.prototype.getPublicData = function () {
     const values = Object.assign({}, this.get());
     delete values.password;

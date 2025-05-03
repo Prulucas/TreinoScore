@@ -1,13 +1,38 @@
-import db from '../models/Index.js';
-const { Workout } = db;
+/**
+ * ================================================================
+ * Arquivo: global.middleware.js
+ * Autor: Pedro Lucas
+ * Ano: 2025
+ * GitHub: https://github.com/Prulucas
+ * ================================================================
+ *
+ * Descrição:
+ * Este arquivo contém middlewares de autorização que são usados para 
+ * verificar permissões de acesso de usuários a recursos específicos.
+ * O primeiro middleware verifica se o usuário tem permissão para acessar 
+ * os dados de outro usuário, com base no papel do usuário ou na 
+ * correspondência do ID. O segundo middleware verifica se o usuário 
+ * tem permissão para acessar ou modificar um treino específico.
+ *
+ * O objetivo é garantir que apenas administradores, professores ou 
+ * o próprio usuário autorizado tenham acesso aos seus dados ou aos 
+ * dados de treinos.
+ */
 
+import db from '../models/Index.js'; // Importa o banco de dados e os modelos
+const { Workout } = db; // Desestrutura o modelo Workout
 
+/**
+ * Middleware para verificar se o usuário tem permissão para acessar 
+ * ou modificar dados de outro usuário. O acesso é permitido para 
+ * administradores, professores ou para o próprio usuário dono dos dados.
+ */
 export function verifyAdminOrOwner(req, res, next) {
-    const userIdLogged = req.user.id;
-    const userRole = req.user.role;
-    const userIdFromParams = req.params.userId;
+    const userIdLogged = req.user.id; // ID do usuário logado (do token)
+    const userRole = req.user.role; // Papel do usuário logado
+    const userIdFromParams = req.params.userId; // ID do usuário na URL
 
-    // Log do ID vindo da URL
+    // Log do ID vindo da URL para depuração
     console.log("ID da URL:", userIdFromParams);
 
     // Verifica se o ID da URL é válido
@@ -29,8 +54,13 @@ export function verifyAdminOrOwner(req, res, next) {
     });
 }
 
+/**
+ * Middleware para verificar se o usuário tem permissão para acessar 
+ * ou modificar um treino específico. O acesso é permitido para 
+ * administradores, professores ou para o próprio usuário dono do treino.
+ */
 export async function verifyWorkoutAccess(req, res, next) {
-    const userRole = req.user.role;
+    const userRole = req.user.role; // Papel do usuário logado
     const userIdLogged = req.user.id; // ID do usuário logado (do token)
     const workoutIdFromParams = req.params.id; // ID do treino na URL
 
@@ -51,6 +81,7 @@ export async function verifyWorkoutAccess(req, res, next) {
     }
 
     try {
+        // Busca o treino no banco de dados com o ID fornecido
         const workout = await Workout.findByPk(workoutIdFromParams);
 
         // Se o treino não for encontrado, retorna erro 404
@@ -58,10 +89,10 @@ export async function verifyWorkoutAccess(req, res, next) {
             return res.status(404).json({ message: "Treino não encontrado!" });
         }
 
-        // Verificando IDs para garantir que a comparação seja feita corretamente
+        // Log do ID do treino no banco para depuração
         console.log("ID do treino no banco:", workout.userId);
 
-        // Garantir que ambos os IDs sejam comparados como números
+        // Verifica se o usuário logado é o dono do treino
         if (Number(workout.userId) === Number(userIdLogged)) {
             console.log('Aluno autorizado a acessar o próprio treino.');
             return next(); // Permite acesso ao treino

@@ -1,3 +1,18 @@
+/**
+ * ================================================================
+ * Arquivo: workout.route.js
+ * Autor: Pedro Lucas
+ * Ano: 2025
+ * GitHub: https://github.com/Prulucas
+ * ================================================================
+ *
+ * Descrição:
+ * Este arquivo define as rotas para a manipulação de treinos no sistema.
+ * Ele inclui rotas para criar, consultar, atualizar e deletar treinos, com
+ * verificação de autenticação e permissões baseadas no papel do usuário.
+ * Apenas administradores e professores podem realizar algumas operações.
+ */
+
 import { Router } from 'express';
 import { WorkoutController } from '../controllers/workout.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
@@ -27,7 +42,6 @@ router.get('/workoutbyuser/:userId', authMiddleware, verifyAdminOrOwner, control
 // Retorna os detalhes de um treino específico pelo seu ID
 // Ex: GET /getworkout/10 vai retornar o treino com id 10
 router.get('/getworkout/:id', authMiddleware, verifyWorkoutAccess, controller.getById); // retorna para o professor
-
 
 // ROTAS DE ATUALIZAÇÃO E REMOÇÃO
 
