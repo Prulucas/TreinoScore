@@ -14,7 +14,8 @@
 
 import { DataTypes } from 'sequelize'; // Tipos do Sequelize
 import bcrypt from 'bcrypt'; // Biblioteca para criptografar senhas
-import { sequelize } from '../database/index.js'; // Instância Sequelize
+import sequelize from '../database/db.js';
+
 
 // Define o modelo User
 const User = sequelize.define('User', {

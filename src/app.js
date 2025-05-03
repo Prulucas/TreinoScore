@@ -1,28 +1,12 @@
-/**
- * ================================================================
- * Arquivo: app.js
- * Autor: Pedro Lucas
- * Ano: 2025
- * GitHub: https://github.com/Prulucas
- * ================================================================
- *
- * Descrição:
- * Este arquivo contém a configuração e inicialização do servidor Express.
- * Ele define as rotas da aplicação, os middlewares utilizados e realiza a sincronização com o banco de dados utilizando Sequelize.
- * Além disso, ele inicializa o servidor na porta especificada na variável de ambiente PORT ou na porta padrão 3001.
- * 
- * Certifique-se de que os arquivos de rotas e configurações do banco de dados estejam corretos antes de rodar o servidor.
- */
-
 import "dotenv/config"; // Carrega as variáveis de ambiente do arquivo .env
 import express from "express"; // Importa o framework Express para criar o servidor
 import cors from "cors"; // Importa o middleware CORS para permitir requisições entre origens diferentes
 import userRouter from "./routes/user.route.js"; // Importa as rotas relacionadas aos usuários
-import authRouter from "./routes/auth.route.js"; // Importa as rotas de autenticação, certifique-se de que o arquivo auth.route.js existe
+import authRouter from "./routes/auth.route.js"; // Importa as rotas de autenticação
 import router from "./routes/index.js"; // Importa as rotas principais da aplicação
 
 import db from "./models/Index.js"; // Importa o arquivo de configuração do banco de dados
-import './jobs/resetStatusJob.js'; // Importa os jobs (tarefas agendadas), como o job de resetar status
+import './jobs/resetStatusJob.js'; // Importa os jobs (tarefas agendadas)
 
 // Inicializa a aplicação Express
 const app = express();
