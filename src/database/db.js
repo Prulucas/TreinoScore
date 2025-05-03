@@ -32,7 +32,11 @@ const sequelizeInstance = new Sequelize(
         host: process.env.DB_HOST,  // URL do Supabase ou outro serviço de banco de dados
         port: process.env.DB_PORT,  // Porta de conexão com o banco de dados
         dialect: 'postgres',        // Tipo do banco de dados (PostgreSQL)
-        logging: console.log        // Habilita o log SQL para depuração
+        logging: console.log,       // Habilita o log SQL para depuração
+        dialectOptions: {
+            // Forçar o uso de IPv4, caso haja problemas com IPv6
+            ipv6: false
+        }
     }
 );
 
@@ -42,7 +46,7 @@ const testConnection = async () => {
         await sequelizeInstance.authenticate();  // Testa a conexão com o banco de dados
         console.log('Conexão com o Supabase foi bem-sucedida!');
     } catch (error) {
-        console.error('Não foi possível conectar ao Supabase:', error);
+        console.error('Não foi possível conectar ao Supabase:', error.message);
     }
 };
 
