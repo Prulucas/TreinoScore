@@ -7,31 +7,33 @@
  * ================================================================
  *
  * Descrição:
- * Este arquivo é responsável por configurar a conexão com o banco de 
- * dados PostgreSQL utilizando o Sequelize como ORM. Ele carrega as 
- * variáveis de ambiente de um arquivo `.env` e cria uma instância do 
- * Sequelize para ser utilizada em outras partes do projeto.
- *
- * O arquivo exporta a instância do Sequelize como `sequelize`, permitindo
- * que seja importada e utilizada em outros módulos do projeto para interagir 
- * com o banco de dados.
+ * Este arquivo configura a conexão com o banco de dados PostgreSQL
+ * no Supabase utilizando a URL de conexão (com pooling e SSL).
+ * Utiliza Sequelize como ORM.
  */
 
-// Importa o Sequelize e dotenv para carregar as variáveis de ambiente
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
 
-// Cria e exporta a instância do Sequelize configurada com as variáveis de ambiente
-export const sequelize = new Sequelize(
-    process.env.DB_NAME,        // Nome do banco de dados
-    process.env.DB_USER,        // Usuário do banco de dados
-    process.env.DB_PASSWORD,    // Senha do banco de dados
-    {
-        host: process.env.DB_HOST,  // Host do banco de dados
-        port: process.env.DB_PORT,  // Porta do banco de dados
-        dialect: 'postgres'         // Tipo do banco de dados (PostgreSQL)
-    }
-);
+console.log('DB Config =>', {
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT
+});
+
+// Cria e exporta a instância do Sequelize usando DATABASE_URL
+export const sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    dialectOptions: {
+        ssl: {
+            require: true, // Força uso de SSL
+            rejectUnauthorized: false // Evita erros com certificado não autorizado
+        }
+    },
+    logging: false // Desativa logs SQL no console (opcional)
+});

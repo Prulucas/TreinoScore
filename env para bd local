@@ -1,0 +1,11 @@
+# Autenticação JWT
+SECRET_JWT=286e3b9a5662734295a9132c88deb018  # MD5 de "SegredoEncriptadoDoTG"
+TOKEN_EXPIRATION=1h
+REFRESH_TOKEN_EXPIRATION=7d
+
+#senha padrão de teste: "123456" => "$2b$10$CwTycUXWue0Thq9StjUM0uJ8HJ8A1I2SG9sWxR5S/p8UVoOyFKz5e"
+DB_NAME=tcc_db
+DB_USER=postgres
+DB_PASSWORD=postgres  # A mesma que você usa no pgAdmin
+DB_HOST=localhost
+DB_PORT=5432  # Porta padrão do PostgreSQL
