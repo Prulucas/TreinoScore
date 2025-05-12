@@ -121,7 +121,7 @@ export default (sequelize, DataTypes) => {
                 if (workout.exercises && Array.isArray(workout.exercises)) {
                     workout.exercises = workout.exercises.map(ex => ({
                         ...ex,
-                        name: ex.name.trim()
+                        name: typeof ex.name === 'string' ? ex.name.trim() : ''
                     }));
                 }
             }

@@ -143,11 +143,11 @@ export class WorkoutRepository {
      */
     async createDefaultWorkouts(userId) {
         const defaultWorkouts = [
-            { day: 1, title: "Treino 1", exercises: this._defaultExercises() },
-            { day: 2, title: "Treino 2", exercises: this._defaultExercises() },
-            { day: 3, title: "Treino 3", exercises: this._defaultExercises() },
-            { day: 4, title: "Treino 4", exercises: this._defaultExercises() },
-            { day: 5, title: "Treino 5", exercises: this._defaultExercises() }
+            { day: 1, title: "FullBody", exercises: this._defaultExercises() },
+            { day: 2, title: "FullBody", exercises: this._defaultExercises() },
+            { day: 3, title: "FullBody", exercises: this._defaultExercises() },
+            { day: 4, title: "FullBody", exercises: this._defaultExercises() },
+            { day: 5, title: "FullBody", exercises: this._defaultExercises() }
         ];
 
         const transaction = await db.sequelize.transaction();
@@ -213,11 +213,14 @@ export class WorkoutRepository {
      */
     _defaultExercises() {
         return [
-            { name: "Exercício 1", sets: 1, reps: "0-0", rest: 30 },
-            { name: "Exercício 2", sets: 1, reps: "0-0", rest: 30 },
-            { name: "Exercício 3", sets: 1, reps: "0-0", rest: 30 },
-            { name: "Exercício 4", sets: 1, reps: "0-0", rest: 30 },
-            { name: "Exercício 5", sets: 1, reps: "0-0", rest: 30 }
+            { name: "Peito Máquina", sets: 3, reps: "10-15", rest: 40 },
+            { name: "Costas Máquina", sets: 3, reps: "10-15", rest: 40 },
+            { name: "Triceps pulley", sets: 2, reps: "10-15", rest: 40 },
+            { name: "Biceps scott", sets: 2, reps: "10-15", rest: 40 },
+            { name: "Extensora", sets: 3, reps: "10-15", rest: 40 },
+            { name: "Flexora", sets: 3, reps: "10-15", rest: 40 },
+            { name: "Panturrilha", sets: 2, reps: "10-15", rest: 40 }
+
         ];
     }
 }

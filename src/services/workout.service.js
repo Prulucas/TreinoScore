@@ -61,7 +61,7 @@ export class WorkoutService {
                     throw new Error(`Exercício ${index + 1}: Nome inválido`);
                 }
                 // Verifica se o número de séries do exercício está entre 1 e 10
-                if (!Number.isInteger(ex.sets) || ex.sets < 1 || ex.sets > 10) {
+                if (!Number.isInteger(ex.sets) || ex.sets < 0 || ex.sets > 10) {
                     throw new Error(`Exercício ${index + 1}: Número de séries inválido (1-10)`);
                 }
                 // Verifica se as repetições do exercício estão corretas
@@ -69,7 +69,7 @@ export class WorkoutService {
                     throw new Error(`Exercício ${index + 1}: Repetições inválidas`);
                 }
                 // Verifica se o tempo de descanso está entre 30 e 180 segundos
-                if (ex.rest && (!Number.isInteger(ex.rest) || ex.rest < 30 || ex.rest > 180)) {
+                if (ex.rest && (!Number.isInteger(ex.rest) || ex.rest < 0 || ex.rest > 180)) {
                     throw new Error(`Exercício ${index + 1}: Tempo de descanso inválido (30-180s)`);
                 }
             });
