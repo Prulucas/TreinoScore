@@ -32,7 +32,7 @@ router.get('/getall', checkRole(['admin', 'professor']), userController.findAllC
 router.get('/findById/:id', checkRole(['admin', 'professor']), userController.findByIdController); // Rota para buscar um usuário por ID, acessível para admin ou professor
 
 // Apenas o próprio usuário ou admin pode atualizar ou deletar um usuário
-router.patch('/update/:userId', verifyAdminOrOwner, userController.updateController); // Rota para atualizar o usuário, validação feita pelo middleware
-router.delete('/delete/:userId', verifyAdminOrOwner, userController.deleteController); // Rota para deletar o usuário, validação feita pelo middleware
+router.patch('/update/:userId', checkRole(['admin', 'professor']), userController.updateController); // Rota para atualizar o usuário, validação feita pelo middleware
+router.delete('/delete/:userId', checkRole(['admin', 'professor']), userController.deleteController); // Rota para deletar o usuário, validação feita pelo middleware
 
 export default router;

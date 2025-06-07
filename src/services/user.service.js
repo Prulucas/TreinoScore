@@ -159,10 +159,6 @@ const deleteService = async (id, userIdLogged, userRole, password) => {
     const userIdToDelete = String(id);
     const loggedUserId = String(userIdLogged);
 
-    if (userIdToDelete !== loggedUserId) {
-        throw new Error("You cannot delete this user");
-    }
-
     // Verifica se a senha está correta
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
